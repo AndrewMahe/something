@@ -20,18 +20,20 @@ def newBoard(n):
     return board
 
 
-def playerSelect(n):
-    test = True
-    while test:
-        try:
-            i = int(input("Ligne select = "))-1
-            j = int(input("Colonne select = "))-1
-            if (i >= 1 & i < n) and (j >= 1 & j < n):
+def playerSelect(board, n):
+        test = True
+        while test:
+            i = -1
+            j = -1
+            while (i<0 or i>=n) and (j<0 or j>=n):
+                try:
+                    i = int(input("Ligne select = "))-1
+                    j = int(input("Colonne select = "))-1
+                except ValueError:
+                    print("Une erreur de valeur a été detecter")
+
+            if possibleSquare(board, n, i, j):
                 return i, j
-        except ValueError:
-            print("Une erreur de valeur a été detecter")
-
-
 # ne fonction «possibleSquare(board,n,i,j)» qui retourne
 #  True si i et j sont les coordonnées d’une case où un joueur
 #  peut poser une lettre, et False sinon.
@@ -40,6 +42,7 @@ def possibleSquare(board, n, i, j):
     if board[i][j] == 0:
         return True
     else:
+        print("line already taken")
         return False
 
 def squareLetter(board,n,i,j):
@@ -108,7 +111,7 @@ def main():
         player += 1
         print("Tour du joueur",player)
 
-        i, j = playerSelect(n)
+        i, j = playerSelect(board, n)
         l = squareLetter(board, n, i, j)
         update(board, n, i, j, l, scores, player, lines)
 
