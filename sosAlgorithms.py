@@ -17,7 +17,6 @@ def newBoard(n):
         board.append([])
         for x in range(0, n):
             board[i].append(0)
-
     return board
 
 
@@ -25,12 +24,10 @@ def playerSelect(n):
     test = True
     while test:
         try:
-            i = int(input("ligne select"))
-            j = int(input("colone select"))
-
-            if (i >= 1 & i <= n) and (j >= 1 & j <= n):
+            i = int(input("ligne select ="))-1
+            j = int(input("colonne select ="))-1
+            if (i >= 1 & i < n) and (j >= 1 & j < n):
                 return i, j
-
         except ValueError:
             print("une erreur de valeur a été detecter")
 
@@ -43,6 +40,7 @@ def possibleSquare(board, n, i, j):
         return True
     else:
         return False
+
 
 
 ##Une procédure « updateScoreS(board,n,i,j,scores,player,lines) » qui suppose que le joueur player ait posé la lettre « S » sur la case de coordonnées
@@ -81,7 +79,11 @@ def main():
     board = newBoard(n)
     i, j = playerSelect(n)
 
+
     possibleSquare(board, n, i, j)
+    print(possibleSquare(board, n, i, j))
+
+
 
 
 
