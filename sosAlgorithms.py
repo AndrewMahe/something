@@ -1,47 +1,54 @@
 ##Une fonction « newBoard(n) » qui retourne une liste à deux dimensions représentant l’état initial d’un plateau de jeu à n lignes et n colonnes.
 def caseSizeSelect():
 
-    test = True
-    while test:
-
+    n = 0
+    while (n < 5) or (n > 20):
         try:
             n = int(input("n ="))
-            if n > 5 and n < 20:
-                test=False
-
         except ValueError:
             print("une erreur sur n est survenu")
-
     return n
+
 
 def newBoard(n):
 
     board = []
-    for i in range(0,n):
+    for i in range(0, n):
         board.append([])
-        for x in range(0,n):
+        for x in range(0, n):
             board[i].append(0)
 
     return board
 
+
 def playerSelect(n):
-    # test = True
-    #
-    #
-    # i = int(input("ligne select"))
-    # j = int(input("colone select"))
+    test = True
+    while test:
+        try:
+            i = int(input("ligne select"))
+            j = int(input("colone select"))
+
+            if (i >= 1 & i <= n) and (j >= 1 & j <= n):
+                return i, j
+
+        except ValueError:
+            print("une erreur de valeur a été detecter")
 
 
-    pass
-##ne fonction « possibleSquare(board,n,i,j) » qui retourne True si i et j sont les coordonnées d’une case où un joueur peut poser une lettre, et False sinon.
+#ne fonction «possibleSquare(board,n,i,j)» qui retourne
+#  True si i et j sont les coordonnées d’une case où un joueur peut poser une lettre, et False sinon.
 
-def possibleSquare(board,n,i,j):
-    pass
+def possibleSquare(board, n, i, j):
+    if board[i][j] == 0:
+        return True
+    else:
+        return False
+
 
 ##Une procédure « updateScoreS(board,n,i,j,scores,player,lines) » qui suppose que le joueur player ait posé la lettre « S » sur la case de coordonnées
  ## i et j. Elle recherche alors les éventuels alignements de « SOS » que cela a pu engendrer, et met à jour le score du joueur player et la liste lines.
 
-def updateScoreS(board,n,i,j,scores,player,lines):
+def updateScoreS(board, n, i, j, scores, player, lines):
     pass
 
 
@@ -71,12 +78,10 @@ def winner(scores):
 def main():
 
     n = caseSizeSelect()
-
-
     board = newBoard(n)
-    print(board)
+    i, j = playerSelect(n)
 
-
+    possibleSquare(board, n, i, j)
 
 
 
