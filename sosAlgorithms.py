@@ -77,12 +77,14 @@ def squareLetter(board,n,i,j):
             #Verification - Eviter les erreurs.
             try:
                 l = str(input("Selectionner S ou O : "))
-                #Vérification - Mesasge pour signaler que la lettre n'est pas bonne
-                if l != "s" or l != "o":
-                    print("ERREUR ! Votre lettre n'est pas la bonne")
-                    print("L - ", l)
+                                
             except:
                 print("Une erreur sur la valeur l est intervenu")
+                
+            #Vérification - Message pour signaler que la lettre n'est pas bonne
+            if l != "s" and l != "o":
+                    print("ERREUR ! Votre lettre n'est pas la bonne")
+                    print("L - ", l)
         if l == "s":
             return 1
         elif l == "o":
@@ -95,19 +97,8 @@ def squareLetter(board,n,i,j):
 # que cela a pu engendrer, et met à jour le score du joueur player et la liste lines.
 
 def updateScoreS(board, n, i, j, scores, player, lines):
-    #Haut
-    if board[i - 1][j - 1] == 1 and board[i + 1][j + 1] == 1:
-        print("occu")
-
-    #Bas - Problème ici même
-    if board[i - 1][j] == 1 and board[i + 1][j] == 1:
-        print("occu")
-
-    if board[i][j - 1] == 1 and board[i][j + 1] == 1:
-        print("occu")
-
-    if board[i + 1][j - 1] == 1 and board[i + 1][j + 1] == 1:
-        print("occu")
+    pass
+    
 
 # Une procédure « updateScoreO(board,n,i,j,scores,player,lines) » qui
 # suppose que le joueur player ait posé la lettre « O » sur la case de coordonnées i et j.
@@ -115,7 +106,20 @@ def updateScoreS(board, n, i, j, scores, player, lines):
 #  a pu engendrer, et met à jour le score du joueur player et la liste lines.
 
 def updateScoreO(board,n,i,j,scores,player,lines):
-    pass
+    #check les case gauche puis leur opposer si positif
+    #Haut gauche
+    if board[i - 1][j - 1] == 1 and board[i + 1][j + 1] == 1:
+        print("occu")
+
+    #haut mid
+    if board[i - 1][j] == 1 and board[i + 1][j] == 1:
+        print("occu")
+    #mid gauche
+    if board[i][j - 1] == 1 and board[i][j + 1] == 1:
+        print("occu")
+    #bas gauche
+    if board[i + 1][j - 1] == 1 and board[i + 1][j + 1] == 1:
+        print("occu")
 
 
 # Une procédure « update(board,n,i,j,l,scores,player,lines) »
@@ -127,7 +131,6 @@ def updateScoreO(board,n,i,j,scores,player,lines):
 def update(board,n,i,j,l,scores,player,lines):
     board[i][j] = l
     if l == 1:
-       # updateScoreS(board, n, j, scores, player, lines)
         updateScoreS(board, n, i, j, scores, player, lines)
     else:
         updateScoreO(board,n,i,j,scores,player,lines)
