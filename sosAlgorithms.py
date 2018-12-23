@@ -1,4 +1,10 @@
+def display(board,n):
+    for i in range(0,n):
+        print(" ")
+        for x in range(0,n):
+            print(board[i][x],end=" ")
 
+    print(" ")
 def caseSizeSelect():
 
     n = 0
@@ -31,10 +37,8 @@ def playerSelect(board, n):
                     j = int(input("Colonne select = "))-1
                 except ValueError:
                     print("Une erreur de valeur a été detecter")
-
                 if (i<0 or i>=n) and (j<0 or j>=n):
                     print("Valeur en dehors de la map")
-
             if possibleSquare(board, n, i, j):
                 return i, j
 # ne fonction «possibleSquare(board,n,i,j)» qui retourne
@@ -73,6 +77,7 @@ def squareLetter(board,n,i,j):
 def updateScoreS(board, n, i, j, scores, player, lines):
     pass
 
+
 # Une procédure « updateScoreO(board,n,i,j,scores,player,lines) » qui
 # suppose que le joueur player ait posé la lettre « O » sur la case de coordonnées i et j.
 # Elle recherche alors les éventuels alignements de « SOS » que cela
@@ -80,7 +85,18 @@ def updateScoreS(board, n, i, j, scores, player, lines):
 
 
 def updateScoreO(board, n, i, j, scores, player, lines):
-    pass
+
+    if board[i - 1][j - 1] == 1 and board[i + 1][j + 1] == 1:
+        print("occu")
+
+    if board[i - 1][j] == 1 and board[i + 1][j] == 1:
+        print("occu")
+
+    if board[i][j - 1] == 1 and board[i][j + 1] == 1:
+        print("occu")
+
+    if board[i + 1][j - 1] == 1 and board[i + 1][j + 1] == 1:
+        print("occu")
 
 
 # Une procédure « update(board,n,i,j,l,scores,player,lines) »
@@ -113,20 +129,22 @@ def main():
 
     scores = 0
     lines = []
-    player = 0
+    player = 1
 
     play = True
     while play:
 
-        print(board)
-        player += 1
+        display(board,n)
+
         print("Tour du joueur",player)
 
         i, j = playerSelect(board, n)
         l = squareLetter(board, n, i, j)
         update(board, n, i, j, l, scores, player, lines)
 
-        if player == 2:
+        player += 1
+        print(player)
+        if player == 3:
             player = 1
 
 
