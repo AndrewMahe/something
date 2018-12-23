@@ -25,7 +25,7 @@ def playerSelect(board, n):
         while test:
             i = -1
             j = -1
-            while (i<0 or i>=n) and (j<0 or j>=n):
+            while (i<0 or i>=n) or (j<0 or j>=n):
                 try:
                     i = int(input("Ligne select = "))-1
                     j = int(input("Colonne select = "))-1
@@ -92,7 +92,7 @@ def updateScoreO(board, n, i, j, scores, player, lines):
 def update(board,n,i,j,l,scores,player,lines):
     board[i][j] = l
     if l == 1:
-        updateScoreS(board, n, j, scores, player, lines)
+        updateScoreS(board, n, i, j, scores, player, lines)
     else:
         updateScoreO(board, n, i, j, scores, player, lines)
 
