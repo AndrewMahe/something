@@ -32,11 +32,15 @@ def playerSelect(board, n):
                 except ValueError:
                     print("Une erreur de valeur a été detecter")
 
+                if (i<0 or i>=n) and (j<0 or j>=n):
+                    print("Valeur en dehors de la map")
+
             if possibleSquare(board, n, i, j):
                 return i, j
 # ne fonction «possibleSquare(board,n,i,j)» qui retourne
 #  True si i et j sont les coordonnées d’une case où un joueur
 #  peut poser une lettre, et False sinon.
+
 
 def possibleSquare(board, n, i, j):
     if board[i][j] == 0:
@@ -44,6 +48,7 @@ def possibleSquare(board, n, i, j):
     else:
         print("line already taken")
         return False
+
 
 def squareLetter(board,n,i,j):
     if possibleSquare(board, n, i, j):
@@ -56,7 +61,6 @@ def squareLetter(board,n,i,j):
                 print("Une erreur sur la valeur l est intervenu")
         if l == "s":
             return 1
-
         else:
             return 2
 
@@ -64,6 +68,7 @@ def squareLetter(board,n,i,j):
 # qui suppose que le joueur player ait posé la lettre « S » sur la case de coordonnées
 # i et j. Elle recherche alors les éventuels alignements de « SOS »
 # que cela a pu engendrer, et met à jour le score du joueur player et la liste lines.
+
 
 def updateScoreS(board, n, i, j, scores, player, lines):
     pass
@@ -73,7 +78,8 @@ def updateScoreS(board, n, i, j, scores, player, lines):
 # Elle recherche alors les éventuels alignements de « SOS » que cela
 #  a pu engendrer, et met à jour le score du joueur player et la liste lines.
 
-def updateScoreO(board,n,i,j,scores,player,lines):
+
+def updateScoreO(board, n, i, j, scores, player, lines):
     pass
 
 
@@ -85,11 +91,16 @@ def updateScoreO(board,n,i,j,scores,player,lines):
 
 def update(board,n,i,j,l,scores,player,lines):
     board[i][j] = l
+    if l == 1:
+        updateScoreS(board, n, j, scores, player, lines)
+    else:
+        updateScoreO(board, n, i, j, scores, player, lines)
 
     return board
 
 # Une fonction « winner(scores) » qui retourne une chaîne de
 #  caractère indiquant le résultat de la partie.
+
 
 def winner(scores):
     pass
