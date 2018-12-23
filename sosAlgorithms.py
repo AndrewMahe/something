@@ -1,23 +1,40 @@
-def display(board,n):
+# NOTE BUG :
+# - out of range quand je tape 5-5 et ensuite S
+#   Elle sont au niveau de "updateScoreS
+
+
+#Note random
+# i = ligne
+# j = colonne
+
+
+
+
+def display(board,n):                                   #FINI
     for i in range(0,n):
         print(" ")
         for x in range(0,n):
             print(board[i][x],end=" ")
 
     print(" ")
-def caseSizeSelect():
 
+#Initialisation du nombre de ligne/colonne
+def caseSizeSelect():                                   #FINI
     n = 0
     while (n < 5) or (n > 20):
+        #Verification - Eviter les erreurs (Pas de string) 
         try:
-            n = int(input("n = "))
+            n = int(input("Combien de taille fera votre carré (Entre 5 et 20) ? "))
+            #Vérification - Chiffre trop petit
+            if (n<5) or (n>20):
+                print("Votre chiffre est trop petit")
         except ValueError:
-            print("Une erreur sur n est survenu")
+            print("Merci de bien vouloir taper un nombre.")
     return n
 
 
-def newBoard(n):
-
+#Creation du tableau de jeu
+def newBoard(n):                                        #FINI
     board = []
     for i in range(0, n):
         board.append([])
@@ -25,70 +42,64 @@ def newBoard(n):
             board[i].append(0)
     return board
 
-
-def playerSelect(board, n):
+#Selection du joueur 
+def playerSelect(board, n):                             #Pas fini
         test = True
         while test:
             i = -1
             j = -1
             while (i<0 or i>=n) or (j<0 or j>=n):
                 try:
-                    i = int(input("Ligne select = "))-1
-                    j = int(input("Colonne select = "))-1
+                    i = int(input("Selection de la ligne : "))-1
+                    j = int(input("Selection de la colonne :  "))-1
+                    print("i - ",i)
+                    print("j - ",j)
                 except ValueError:
-                    print("Une erreur de valeur a été detecter")
-                if (i<0 or i>=n) and (j<0 or j>=n):
-                    print("Valeur en dehors de la map")
+                    print("Merci de bien vouloir taper un nombre.")
+
             if possibleSquare(board, n, i, j):
                 return i, j
 # ne fonction «possibleSquare(board,n,i,j)» qui retourne
 #  True si i et j sont les coordonnées d’une case où un joueur
 #  peut poser une lettre, et False sinon.
 
-
-def possibleSquare(board, n, i, j):
+def possibleSquare(board, n, i, j):                     #FINI
     if board[i][j] == 0:
         return True
     else:
-        print("line already taken")
+        print("Impossible de choisir cette case")
         return False
-
 
 def squareLetter(board,n,i,j):
     if possibleSquare(board, n, i, j):
         l = 0
         while l != "s" and l != "o":
+            #Verification - Eviter les erreurs.
             try:
-                l = str(input("Selectionner soit s soit o"))
-                print(l)
+                l = str(input("Selectionner S ou O : "))
+                #Vérification - Mesasge pour signaler que la lettre n'est pas bonne
+                if l != "s" or l != "o":
+                    print("ERREUR ! Votre lettre n'est pas la bonne")
+                    print("L - ", l)
             except:
                 print("Une erreur sur la valeur l est intervenu")
         if l == "s":
             return 1
-        else:
+        elif l == "o":
             return 2
+        
 
 # Une procédure « updateScoreS(board,n,i,j,scores,player,lines) »
-# qui suppose que le joueur player ait posé la lettre « S » sur la case de coordonnées
+# qui suppose que le joueur player ait posé la lettre « S » sur la case de coo3rdonnées
 # i et j. Elle recherche alors les éventuels alignements de « SOS »
 # que cela a pu engendrer, et met à jour le score du joueur player et la liste lines.
 
-
 def updateScoreS(board, n, i, j, scores, player, lines):
-    pass
-
-
-# Une procédure « updateScoreO(board,n,i,j,scores,player,lines) » qui
-# suppose que le joueur player ait posé la lettre « O » sur la case de coordonnées i et j.
-# Elle recherche alors les éventuels alignements de « SOS » que cela
-#  a pu engendrer, et met à jour le score du joueur player et la liste lines.
-
-
-def updateScoreO(board, n, i, j, scores, player, lines):
-
+    #Haut
     if board[i - 1][j - 1] == 1 and board[i + 1][j + 1] == 1:
         print("occu")
 
+    #Bas - Problème ici même
     if board[i - 1][j] == 1 and board[i + 1][j] == 1:
         print("occu")
 
@@ -97,6 +108,14 @@ def updateScoreO(board, n, i, j, scores, player, lines):
 
     if board[i + 1][j - 1] == 1 and board[i + 1][j + 1] == 1:
         print("occu")
+
+# Une procédure « updateScoreO(board,n,i,j,scores,player,lines) » qui
+# suppose que le joueur player ait posé la lettre « O » sur la case de coordonnées i et j.
+# Elle recherche alors les éventuels alignements de « SOS » que cela
+#  a pu engendrer, et met à jour le score du joueur player et la liste lines.
+
+def updateScoreO(board,n,i,j,scores,player,lines):
+    pass
 
 
 # Une procédure « update(board,n,i,j,l,scores,player,lines) »
@@ -108,15 +127,13 @@ def updateScoreO(board, n, i, j, scores, player, lines):
 def update(board,n,i,j,l,scores,player,lines):
     board[i][j] = l
     if l == 1:
+       # updateScoreS(board, n, j, scores, player, lines)
         updateScoreS(board, n, i, j, scores, player, lines)
     else:
-        updateScoreO(board, n, i, j, scores, player, lines)
-
-    return board
+        updateScoreO(board,n,i,j,scores,player,lines)
 
 # Une fonction « winner(scores) » qui retourne une chaîne de
 #  caractère indiquant le résultat de la partie.
-
 
 def winner(scores):
     pass
@@ -135,7 +152,6 @@ def main():
     while play:
 
         display(board,n)
-
         print("Tour du joueur",player)
 
         i, j = playerSelect(board, n)
