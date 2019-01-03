@@ -107,17 +107,16 @@ def updateScoreS(board, n, i, j, scores, player, lines):
         for y in range(j-1,j+2):
             print(x,y)
 
-            # if x==[i] and y==[j]:
-            # continue
-            if board[x][y] == 2:
-                listep = [i-2, i, i+2]
-                listeo = [j-2,j,j+2]
+            if x!=[i] and y!=[j]:
 
+                if (x>=0 and x<n) and (y>=0 and y<n) and board[x][y] == 2:
+                    listep = [i-2, i, i+2]
+                    listeo = [j-2,j,j+2]
 
-                if board[listep[x_c]][listeo[x_p]] == 1:
-                    print("pos",listep[x_c], listeo[x_p])
-                    liste_position = pos(player)
-                    lines[liste_position].append(((listep[x_c],listeo[x_p]),(i,j)))
+                    if (listep[x_c] >= 0 and listep[x_c] < n) and (listeo[x_p] >= 0 and listeo[x_p] < n) and  board[listep[x_c]][listeo[x_p]] == 1:
+                        print("pos",listep[x_c], listeo[x_p])
+                        liste_position = pos(player)
+                        lines[liste_position].append(((listep[x_c],listeo[x_p]),(i,j)))
 
 
             x_p +=1
