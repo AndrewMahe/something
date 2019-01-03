@@ -40,7 +40,6 @@ def newBoard(n):                                        #FINI
         board.append([])
         for x in range(0, n):
             board[i].append(0)
-    print(board)
     return board
 
 #Selection du joueur 
@@ -140,7 +139,7 @@ def updateScoreO(board,n,i,j,scores,player,lines):
     liste_position = pos(player)
 
     if (i-1>=0 and j-1>=0) and board[i - 1][j - 1] == 1 and board[i + 1][j + 1] == 1:
-        lines[liste_position].append(((i - 1,j - 1),(i + 1, j + 1)))
+        lines[liste_position].append(((i - 1,j - 1), (i + 1, j + 1)))
     #haut mid
     if i-1>=0 and board[i - 1][j] == 1 and board[i + 1][j] == 1:
         lines[liste_position].append(((i - 1, j), (i + 1, j)))
@@ -148,9 +147,9 @@ def updateScoreO(board,n,i,j,scores,player,lines):
     if j-1>=0 and board[i][j - 1] == 1 and board[i][j + 1] == 1:
         lines[liste_position].append(((i, j - 1), (i, j + 1)))
     #bas gauche
-    if (i+1<n and j-1>=0) and board[i + 1][j - 1] == 1 and j+1<n and board[i + 1][j + 1] == 1:
-        lines[liste_position].append(((i + 1, j - 1), (i + 1, j + 1)))
-    print(lines)
+    if j-1>=0 and board[i + 1][j - 1] == 1 and j+1<n and board[i - 1][j + 1] == 1:
+        lines[liste_position].append(((i + 1, j - 1), (i - 1, j + 1)))
+
     return lines
 
 # Une procédure « update(board,n,i,j,l,scores,player,lines) »
@@ -187,9 +186,23 @@ def update(board,n,i,j,l,scores,player,lines):
 # Une fonction « winner(scores) » qui retourne une chaîne de
 #  caractère indiquant le résultat de la partie.
 
-def winner(scores):
-    pass
+def winner(scores,coup,n,play):
 
+    if coup == n*n:
+        if scores[0]>scores[1]:
+            print("winner player 1")
+            play = False
+            return coup+1, play
+        elif scores[0]<scores[1]:
+            print("winner player 2")
+            play = False
+            return coup + 1, play
+        else:
+            print("equality")
+            play = False
+            return coup + 1, play
+    print(coup)
+    return coup+1,play
 
 def main():
 
@@ -199,6 +212,7 @@ def main():
     scores = [0, 0]
     lines = [[],[]]
     player = 1
+    coup = 1
 
     play = True
     while play:
@@ -210,6 +224,8 @@ def main():
         l = squareLetter(board, n, i, j)
         lines, scores = update(board, n, i, j, l, scores, player, lines)
         print(lines,"lines", scores, "scores")
+
+        coup, play = winner(scores, coup, n, play)
 
         player += 1
         if player == 3:
