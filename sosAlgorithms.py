@@ -97,7 +97,7 @@ def squareLetter(board,n,i,j):
 # que cela a pu engendrer, et met à jour le score du joueur player et la liste lines.
 
 def updateScoreS(board, n, i, j, scores, player, lines):
-    pass
+    return lines
     
 
 # Une procédure « updateScoreO(board,n,i,j,scores,player,lines) » qui
@@ -108,19 +108,32 @@ def updateScoreS(board, n, i, j, scores, player, lines):
 def updateScoreO(board,n,i,j,scores,player,lines):
     #check les case gauche puis leur opposer si positif
     #Haut gauche
-    if board[i - 1][j - 1] == 1 and board[i + 1][j + 1] == 1:
-        print("occu")
+
+    liste_position = -1
+
+    if player == 1:
+        liste_position = 0
+
+    else:
+        liste_position = 1
+
+
+    if (i-1>=0 and j-1>=0) and board[i - 1][j - 1] == 1 and board[i + 1][j + 1] == 1:
+        lines[liste_position].append(((i - 1,j - 1),(i + 1, j + 1)))
+
 
     #haut mid
-    if board[i - 1][j] == 1 and board[i + 1][j] == 1:
-        print("occu")
+    if i-1>=0 and board[i - 1][j] == 1 and board[i + 1][j] == 1:
+        lines[liste_position].append(((i - 1, j), (i + 1, j)))
     #mid gauche
-    if board[i][j - 1] == 1 and board[i][j + 1] == 1:
-        print("occu")
+    if j-1>=0 and board[i][j - 1] == 1 and board[i][j + 1] == 1:
+        lines[liste_position].append(((i, j - 1), (i, j + 1)))
     #bas gauche
-    if board[i + 1][j - 1] == 1 and board[i + 1][j + 1] == 1:
-        print("occu")
 
+    if (i+1<n and j-1>=0) and board[i + 1][j - 1] == 1 and j+1<n and board[i + 1][j + 1] == 1:
+        lines[liste_position].append(((i + 1, j - 1), (i + 1, j + 1)))
+    print(lines)
+    return lines
 
 # Une procédure « update(board,n,i,j,l,scores,player,lines) »
 #  qui commence par mettre à jour le plateau de jeu en affectant la valeur l à la case
@@ -131,9 +144,22 @@ def updateScoreO(board,n,i,j,scores,player,lines):
 def update(board,n,i,j,l,scores,player,lines):
     board[i][j] = l
     if l == 1:
-        updateScoreS(board, n, i, j, scores, player, lines)
+        lines = updateScoreS(board, n, i, j, scores, player, lines)
     else:
-        updateScoreO(board,n,i,j,scores,player,lines)
+        lines = updateScoreO(board,n,i,j,scores,player,lines)
+
+    print(lines, "lines", scores, "scores")
+    liste_position = -1
+
+    if player == 1:
+        liste_position = 0
+
+    else:
+        liste_position = 1
+
+    scores[liste_position] = len(lines[liste_position])
+    return lines, scores
+
 
 # Une fonction « winner(scores) » qui retourne une chaîne de
 #  caractère indiquant le résultat de la partie.
@@ -147,8 +173,8 @@ def main():
     n = caseSizeSelect()
     board = newBoard(n)
 
-    scores = 0
-    lines = []
+    scores = [[], []]
+    lines = [[],[]]
     player = 1
 
     play = True
@@ -159,7 +185,8 @@ def main():
 
         i, j = playerSelect(board, n)
         l = squareLetter(board, n, i, j)
-        update(board, n, i, j, l, scores, player, lines)
+        lines, scores = update(board, n, i, j, l, scores, player, lines)
+        print(lines,"lines", scores, "scores")
 
         player += 1
         print(player)
