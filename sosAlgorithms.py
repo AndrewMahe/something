@@ -1,6 +1,6 @@
 # NOTE BUG :
-# - out of range quand je tape 5-5 et ensuite S
-#   Elle sont au niveau de "updateScoreS
+# permettre au joueur ayant marquer un point de rejouer
+# incrémentation de 1 au score
 
 
 #Note random
@@ -15,7 +15,6 @@ def display(board,n):                                   #FINI
         print(" ")
         for x in range(0,n):
             print(board[i][x],end=" ")
-
     print(" ")
 
 #Initialisation du nombre de ligne/colonne
@@ -91,14 +90,28 @@ def squareLetter(board,n,i,j):
             return 2
         
 
-# Une procédure « updateScoreS(board,n,i,j,scores,player,lines) »
-# qui suppose que le joueur player ait posé la lettre « S » sur la case de coo3rdonnées
+# Une procedure « updateScoreS(board,n,i,j,scores,player,lines) »
+# qui suppose que le joueur player ait posé la lettre « S » sur la case de coordonnées
 # i et j. Elle recherche alors les éventuels alignements de « SOS »
 # que cela a pu engendrer, et met à jour le score du joueur player et la liste lines.
 
 def updateScoreS(board, n, i, j, scores, player, lines):
+
+    x_c = 0
+    for x in range(i-1,i+2):
+        x_p =0
+        for y in range(j-1,j+2):
+            if x!=[i] and y!=[j]:
+                if (x>=0 and x<n) and (y>=0 and y<n) and board[x][y] == 2:
+                    listep, listeo = [i-2, i, i+2], [j-2,j,j+2]
+                    if (listep[x_c] >= 0 and listep[x_c] < n) and (listeo[x_p] >= 0 and listeo[x_p] < n) and board[listep[x_c]][listeo[x_p]] == 1:
+                        liste_position = pos(player)
+                        lines[liste_position].append(((listep[x_c],listeo[x_p]),(i,j)))
+            x_p +=1
+        x_c += 1
+
     return lines
-    
+
 
 # Une procédure « updateScoreO(board,n,i,j,scores,player,lines) » qui
 # suppose que le joueur player ait posé la lettre « O » sur la case de coordonnées i et j.
@@ -106,22 +119,13 @@ def updateScoreS(board, n, i, j, scores, player, lines):
 #  a pu engendrer, et met à jour le score du joueur player et la liste lines.
 
 def updateScoreO(board,n,i,j,scores,player,lines):
-    #check les case gauche puis leur opposer si positif
-    #Haut gauche
+    # check les case gauche puis leur opposer si positif
+    # Haut gauche
 
-    liste_position = -1
-
-    if player == 1:
-        liste_position = 0
-
-    else:
-        liste_position = 1
-
+    liste_position = pos(player)
 
     if (i-1>=0 and j-1>=0) and board[i - 1][j - 1] == 1 and board[i + 1][j + 1] == 1:
-        lines[liste_position].append(((i - 1,j - 1),(i + 1, j + 1)))
-
-
+        lines[liste_position].append(((i - 1,j - 1), (i + 1, j + 1)))
     #haut mid
     if i-1>=0 and board[i - 1][j] == 1 and board[i + 1][j] == 1:
         lines[liste_position].append(((i - 1, j), (i + 1, j)))
@@ -129,10 +133,9 @@ def updateScoreO(board,n,i,j,scores,player,lines):
     if j-1>=0 and board[i][j - 1] == 1 and board[i][j + 1] == 1:
         lines[liste_position].append(((i, j - 1), (i, j + 1)))
     #bas gauche
+    if j-1>=0 and board[i + 1][j - 1] == 1 and j+1<n and board[i - 1][j + 1] == 1:
+        lines[liste_position].append(((i + 1, j - 1), (i - 1, j + 1)))
 
-    if (i+1<n and j-1>=0) and board[i + 1][j - 1] == 1 and j+1<n and board[i + 1][j + 1] == 1:
-        lines[liste_position].append(((i + 1, j - 1), (i + 1, j + 1)))
-    print(lines)
     return lines
 
 # Une procédure « update(board,n,i,j,l,scores,player,lines) »
@@ -141,41 +144,61 @@ def updateScoreO(board,n,i,j,scores,player,lines):
 #  des deux procédures précédentes. Lors de l’appel de cette
 # procédure, la liste lines est vide.
 
+
+def pos(player):
+
+    if player == 1:
+        liste_position = 0
+    else:
+        liste_position = 1
+
+    return liste_position
+
+
 def update(board,n,i,j,l,scores,player,lines):
+
     board[i][j] = l
     if l == 1:
         lines = updateScoreS(board, n, i, j, scores, player, lines)
     else:
         lines = updateScoreO(board,n,i,j,scores,player,lines)
 
-    print(lines, "lines", scores, "scores")
-    liste_position = -1
-
-    if player == 1:
-        liste_position = 0
-
-    else:
-        liste_position = 1
-
+    liste_position = pos(player)
     scores[liste_position] = len(lines[liste_position])
+
     return lines, scores
 
 
 # Une fonction « winner(scores) » qui retourne une chaîne de
 #  caractère indiquant le résultat de la partie.
 
-def winner(scores):
-    pass
+def winner(scores,coup,n,play):
 
+    if coup == n*n:
+        if scores[0]>scores[1]:
+            print("winner player 1")
+            play = False
+            return coup+1, play
+        elif scores[0]<scores[1]:
+            print("winner player 2")
+            play = False
+            return coup + 1, play
+        else:
+            print("equality")
+            play = False
+            return coup + 1, play
+    print(coup)
+    return coup+1,play
 
 def main():
 
     n = caseSizeSelect()
     board = newBoard(n)
 
-    scores = [[], []]
+    scores = [0, 0]
     lines = [[],[]]
     player = 1
+    coup = 1
 
     play = True
     while play:
@@ -188,8 +211,9 @@ def main():
         lines, scores = update(board, n, i, j, l, scores, player, lines)
         print(lines,"lines", scores, "scores")
 
+        coup, play = winner(scores, coup, n, play)
+
         player += 1
-        print(player)
         if player == 3:
             player = 1
 
